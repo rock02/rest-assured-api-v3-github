@@ -10,7 +10,6 @@ import io.cucumber.junit.CucumberOptions;
 		features = { "src/test/resources/parallel" },
         glue = { "br.com.roque.integration.parallel" }, 
 //		tags = { "@teste_login_git"},
-//		plugin = { "pretty", "json:target/report.json", "de.monochromata.cucumber.report.PrettyReports:target/pretty-cucumber" },
         plugin = { "pretty", "json:target/report.json", "html:target/pretty-cucumber" },
         stepNotifications = true
 		)
