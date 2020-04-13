@@ -148,10 +148,10 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<projectName>cucumber-jvm-example</projectName>
-							<outputDirectory>${project.build.directory}/site/cucumber-reports</outputDirectory>
+							<projectName>rest-assured-api-v3-github</projectName>
+							<outputDirectory>${project.build.directory}/cucumber-JVM-reports</outputDirectory>
 							<cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
-							<enableFlashCharts>false</enableFlashCharts>
+							<enableFlashCharts>true</enableFlashCharts>
 							<skippedFails>true</skippedFails>
 						</configuration>
 					</execution>

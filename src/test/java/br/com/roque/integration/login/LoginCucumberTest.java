@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
 		features = { "src/test/resources/login" },
         glue = { "br.com.roque.integration.login" }, 
 //		tags = { "@teste_login_git"},
-		plugin = { "pretty", "json:target/report.json", "html:target/pretty-cucumber" },
+		plugin = { "pretty", "html:target/cucumber-html-report", "json:target/cucumber.json", "junit:target/cucumber.xml", "rerun:target/rerun.txt" },
         stepNotifications = true
 		)
 public class LoginCucumberTest {
