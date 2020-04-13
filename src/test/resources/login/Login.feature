@@ -12,7 +12,7 @@ Feature: Responsavel pelo login no git
 		
 		Examples:
 			| 	CODIGO		|
-			|   201			|
+			|   200			|
 			
 	@realizar_login_git_dados_invalidos
 	Scenario Outline: Realizar login no git com dados invalidos
