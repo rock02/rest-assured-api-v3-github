@@ -10,9 +10,9 @@ import io.cucumber.junit.CucumberOptions;
 				features = { "src/test/resources/release" },
 	            glue = { "br.com.roque.integration.release" }, 
 //				tags = { "@teste_release_git"},
-				plugin = { "pretty", "json:target/report.json", "de.monochromata.cucumber.report.PrettyReports:target/pretty-cucumber" },
-	            stepNotifications = true,
-				monochrome = true
+//				plugin = { "pretty", "json:target/report.json", "de.monochromata.cucumber.report.PrettyReports:target/pretty-cucumber" },
+	            plugin = { "pretty", "json:target/report.json", "html:target/pretty-cucumber" },
+	            stepNotifications = true
 				)
 public class ReleaseCucumberTest {
 
