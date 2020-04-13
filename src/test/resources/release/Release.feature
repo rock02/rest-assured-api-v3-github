@@ -15,7 +15,7 @@ Feature: Responsavel pelas releases no git
 		
 		Examples:
 			| 	CODIGO	|
-			|   201		|
+			|   200		|
 			
 	@realizar_criacao_release_branch_invalida
 	Scenario Outline: Realizar criacao de release em branch invalida
