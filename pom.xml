@@ -96,9 +96,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.masterthought</groupId>
-			<artifactId>cucumber-reporting</artifactId>
-			<version>5.1.1</version>
+			<groupId>de.monochromata.cucumber</groupId>
+			<artifactId>reporting-plugin</artifactId>
+			<version>4.0.40</version>
 		</dependency>
 
 	</dependencies>
@@ -125,37 +125,6 @@
 					<parallel>methods</parallel>
 					<useUnlimitedThreads>true</useUnlimitedThreads>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>net.masterthought</groupId>
-				<artifactId>maven-cucumber-reporting</artifactId>
-				<version>0.0.5</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.googlecode.totallylazy</groupId>
-						<artifactId>totallylazy</artifactId>
-						<version>991</version>
-						<scope>system</scope>
-						<systemPath>${project.basedir}/lib/totallylazy-991.jar</systemPath>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>execution</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<projectName>rest-assured-api-v3-github</projectName>
-							<outputDirectory>${project.build.directory}/cucumber-JVM-reports</outputDirectory>
-							<cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
-							<enableFlashCharts>true</enableFlashCharts>
-							<skippedFails>true</skippedFails>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 		</plugins>
