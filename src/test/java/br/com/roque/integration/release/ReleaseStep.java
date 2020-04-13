@@ -1,5 +1,7 @@
 package br.com.roque.integration.release;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,10 +22,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import junit.framework.Assert;
-
-import static io.restassured.RestAssured.*;
-import static org.junit.Assert.assertEquals;
 
 public class ReleaseStep {
 

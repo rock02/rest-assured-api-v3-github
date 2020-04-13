@@ -63,7 +63,7 @@ public class LoginStep {
 		System.out.format("Thread ID - %2d - Validar $s retorno\n",
 		        Thread.currentThread().getId(), expectedStatusCode);
 
-		assertEquals(loginService.getResponse().getStatusCode(), expectedStatusCode);
+		assertEquals(expectedStatusCode, loginService.getResponse().getStatusCode());
 		
 	}
 }
