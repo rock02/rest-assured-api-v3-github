@@ -1,11 +1,13 @@
 package br.com.roque.integration.parallel;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
+@Ignore
 @CucumberOptions(
 		features = { "src/test/resources/parallel" },
         glue = { "br.com.roque.integration.parallel" }, 
