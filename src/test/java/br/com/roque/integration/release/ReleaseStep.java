@@ -40,9 +40,10 @@ public class ReleaseStep {
 	public void montar_relase(DataTable dt) {
 
 		ReleaseRequest releaseRequest = this.montarRelease(dt);
-		
-		System.out.format("Thread ID - %2d - Utilizar dados para criar release: %s, %s, %s\n",
-		        Thread.currentThread().getId(), releaseRequest.getName(), releaseRequest.getTag_name(), releaseRequest.getTarget_commitish());
+
+		System.out.format(" Thread ID - %2d - Utilizar dados para criar release: %s, %s, %s \n",
+				Thread.currentThread().getId(), releaseRequest.getName(), releaseRequest.getTag_name(),
+				releaseRequest.getTarget_commitish());
 
 		releaseService.setReleaseRequest(releaseRequest);
 
@@ -51,9 +52,8 @@ public class ReleaseStep {
 	@And("Possuir release {string}")
 	public void possuir_release(String cenario) throws EnumValidationException, JSONException {
 
-		System.out.format("Thread ID - %2d - Possuir release %s\n",
-		        Thread.currentThread().getId(), cenario);
-		
+		System.out.format(" Thread ID - %2d - Possuir release %s \n", Thread.currentThread().getId(), cenario);
+
 		this.enviar_requisicao("GET", "PATH_RELEASE");
 
 		if ("INEXISTENTE".equals(cenario)) {
@@ -68,9 +68,9 @@ public class ReleaseStep {
 	@When("Enviar requisicao {string} para api {string}")
 	public void enviar_requisicao(String tipo, String urlPath) throws EnumValidationException {
 
-		System.out.format("Thread ID - %2d - Enviar requisicao %s para api %s\n",
-		        Thread.currentThread().getId(), tipo, urlPath);
-		
+		System.out.format(" Thread ID - %2d - Enviar requisicao %s para api %s \n", Thread.currentThread().getId(),
+				tipo, urlPath);
+
 		String url = null;
 
 		Response response = null;
@@ -92,13 +92,15 @@ public class ReleaseStep {
 
 				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
 						.replaceAll("%repo", "TesteApiGit")).toString();
-				response = releaseService.getRequestSpecification().accept("application/json").when().get(url).andReturn();
+				response = releaseService.getRequestSpecification().accept("application/json").when().get(url)
+						.andReturn();
 			}
 
 			else {
 
 				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
-						.replaceAll("%repo", "TesteApiGit")).append("/").append(releaseService.getReleaseResponse().getId()).toString();
+						.replaceAll("%repo", "TesteApiGit")).append("/")
+								.append(releaseService.getReleaseResponse().getId()).toString();
 				response = releaseService.getRequestSpecification().when().delete(url).andReturn();
 			}
 			break;
@@ -109,10 +111,10 @@ public class ReleaseStep {
 
 	@Then("Validar {int} retorno")
 	public void validar_retorno(int expectedStatusCode) {
-		
-		System.out.format("Thread ID - %2d - Validar %s retorno\n",
-		        Thread.currentThread().getId(), expectedStatusCode);
-		
+
+		System.out.format(" Thread ID - %2d - Validar %s retorno \n", Thread.currentThread().getId(),
+				expectedStatusCode);
+
 		assertEquals(expectedStatusCode, releaseService.getResponse().getStatusCode());
 	}
 

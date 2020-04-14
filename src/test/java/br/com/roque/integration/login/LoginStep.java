@@ -22,7 +22,7 @@ public class LoginStep {
         
 		LoginRequest loginRequest = this.utilizarDadosAutorizacao(dt);
 		
-		System.out.format("Thread ID - %2d - Utilizar dados para autorizacao: Login: %s\n",
+		System.out.format(" Thread ID - %2d - Utilizar dados para autorizacao: Login: %s \n",
 		        Thread.currentThread().getId(), loginRequest.getUsername());
 		
 		loginService.setLoginRequest(loginRequest);
@@ -50,7 +50,7 @@ public class LoginStep {
 	@When("Enviar requisicao para api {string}")
 	public void enviar_requisicao(String urlPath) throws EnumValidationException {
 		
-		System.out.format("Thread ID - %2d - Enviar requisicao para api %s\n",
+		System.out.format(" Thread ID - %2d - Enviar requisicao para api %s \n",
 		        Thread.currentThread().getId(), urlPath);
 		
 		loginService.setResponse(loginService.getRequestSpecification().when().get(LoginPathEnum.getPath(urlPath)));
@@ -60,7 +60,7 @@ public class LoginStep {
 	@Then("Validar {int} retorno")
 	public void validar_retorno(int expectedStatusCode) {
 		
-		System.out.format("Thread ID - %2d - Validar $s retorno\n",
+		System.out.format(" Thread ID - %2d - Validar $s retorno \n",
 		        Thread.currentThread().getId(), expectedStatusCode);
 
 		assertEquals(expectedStatusCode, loginService.getResponse().getStatusCode());
