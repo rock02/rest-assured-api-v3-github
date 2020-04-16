@@ -19,7 +19,7 @@ public class LoginStep {
 
 	@Given("Utilizar dados para autorizacao:")
 	public RequestSpecification utilizar_dados_para_autorizacao(DataTable dt) {
-        
+		        
 		LoginRequest loginRequest = this.utilizarDadosAutorizacao(dt);
 		
 		System.out.format(" Thread ID - %2d - Utilizar dados para autorizacao: Login: %s \n",
