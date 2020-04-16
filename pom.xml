@@ -102,7 +102,6 @@
 			<version>4.2.3</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>de.monochromata.cucumber</groupId>
 			<artifactId>reporting-plugin</artifactId>
