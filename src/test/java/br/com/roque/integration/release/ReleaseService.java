@@ -13,9 +13,9 @@ public class ReleaseService {
 
 	private RequestSpecification requestSpecification;
 	
-	public ReleaseService() {
-		super();
-	}
+//	public ReleaseService() {
+//		super();
+//	}
 
 	public ReleaseResponse getReleaseResponse() {
 		return releaseResponse;

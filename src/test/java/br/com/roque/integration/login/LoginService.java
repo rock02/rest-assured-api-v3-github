@@ -1,5 +1,7 @@
 package br.com.roque.integration.login;
 
+import static io.restassured.RestAssured.given;
+
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -11,9 +13,9 @@ public class LoginService {
 
 	private RequestSpecification requestSpecification;
 
-	public LoginService() {
-		super();
-	}
+//	public LoginService() {
+//		super();
+//	}
 
 	public RequestSpecification getRequestSpecification() {
 		return requestSpecification;
@@ -37,6 +39,11 @@ public class LoginService {
 
 	public void setLoginRequest(LoginRequest loginRequest) {
 		this.loginRequest = loginRequest;
+	}
+
+	public RequestSpecification realizarLogin() {
+		return given().auth().preemptive()
+				.basic("rock02", "Lipe@1234");
 	}
 
 }

@@ -4,9 +4,7 @@ Feature: Responsavel pelas releases no git
 
 	@realizar_criacao_release
 	Scenario Outline: Realizar criacao de release
-		Given Utilizar dados para autorizacao do login:
-			|	username	|	 password		|
-			|	rock02 		|	 Lipe@1234		|
+		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	master				|	criar relase	|	false	|	false		|
@@ -19,9 +17,7 @@ Feature: Responsavel pelas releases no git
 			
 	@realizar_criacao_release_branch_invalida
 	Scenario Outline: Realizar criacao de release em branch invalida
-		Given Utilizar dados para autorizacao do login:
-			|	username	|	 password		|
-			|	rock02 		|	 Lipe@1234		|
+		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	invalida			|	criar relase	|	false	|	false		|
@@ -37,9 +33,7 @@ Feature: Responsavel pelas releases no git
 			
 	@listar_releases_repositorio
 	Scenario Outline: Listar as reliases do repositorio
-		Given Utilizar dados para autorizacao do login:
-			|	username	|	 password		|
-			|	rock02 		|	 Lipe@1234		|
+		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	master				|	criar relase	|	false	|	false		|
@@ -55,9 +49,7 @@ Feature: Responsavel pelas releases no git
 			
 	@deletar_releases
 	Scenario Outline: Detelar uma release do repositorio
-		Given Utilizar dados para autorizacao do login:
-			|	username	|	 password		|
-			|	rock02 		|	 Lipe@1234		|
+		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	master				|	criar relase	|	false	|	false		|
@@ -67,6 +59,6 @@ Feature: Responsavel pelas releases no git
 		Then Validar <CODIGO> retorno
 		
 		Examples:
-			|	CENARIO			| 	CODIGO			|
+			|	CENARIO			| 	CODIGO	|
 			|	VALIDO			|   204		|
 			|	INEXISTENTE		|   404		|

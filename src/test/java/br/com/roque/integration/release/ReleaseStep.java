@@ -14,26 +14,30 @@ import org.json.JSONObject;
 import com.github.javafaker.Faker;
 
 import br.com.roque.integration.conf.EnumValidationException;
-import br.com.roque.integration.login.LoginStep;
+import br.com.roque.integration.login.LoginService;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
-public class ReleaseStep {
+public final class ReleaseStep {
 
-	private ReleaseService releaseService = new ReleaseService();
+	private final ReleaseService releaseService;
 
-	@Given("Utilizar dados para autorizacao do login:")
-	public void criar_autorizacao_login(DataTable dt) {
+	private final LoginService loginService;
 
-		LoginStep loginStep = new LoginStep();
+	public ReleaseStep(ReleaseService releaseService, LoginService loginService) {
+        this.releaseService = Objects.requireNonNull(releaseService, "releaseService must not be null" );
+        this.loginService = Objects.requireNonNull(loginService, "loginService must not be null" );
 
-		RequestSpecification requestSpecification = loginStep.utilizar_dados_para_autorizacao(dt);
-		releaseService.setRequestSpecification(requestSpecification);
+	}
+
+	@Given("Utilizar dados para autorizacao do login")
+	public void criar_autorizacao_login() {
+
+		releaseService.setRequestSpecification(this.loginService.realizarLogin());
 	}
 
 	@And("Utilizar dados para criar release:")
@@ -45,7 +49,7 @@ public class ReleaseStep {
 				Thread.currentThread().getId(), releaseRequest.getName(), releaseRequest.getTag_name(),
 				releaseRequest.getTarget_commitish());
 
-		releaseService.setReleaseRequest(releaseRequest);
+		this.releaseService.setReleaseRequest(releaseRequest);
 
 	}
 
@@ -59,7 +63,7 @@ public class ReleaseStep {
 		if ("INEXISTENTE".equals(cenario)) {
 
 			ReleaseResponse releaseResponse = new ReleaseResponse(-1L);
-			releaseService.setReleaseResponse(releaseResponse);
+			this.releaseService.setReleaseResponse(releaseResponse);
 		} else
 			this.montarRequestDetetarRelease();
 
@@ -81,18 +85,18 @@ public class ReleaseStep {
 
 			if ("POST".equals(tipo.toUpperCase())) {
 
-				releaseService.getRequestSpecification().accept("application/json")
-						.body(releaseService.getReleaseRequest());
+				this.releaseService.getRequestSpecification().accept("application/json")
+						.body(this.releaseService.getReleaseRequest());
 
 				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
 						.replaceAll("%repo", "TesteApiGit")).toString();
 
-				response = releaseService.getRequestSpecification().when().post(url).andReturn();
+				response = this.releaseService.getRequestSpecification().when().post(url).andReturn();
 			} else if ("GET".equals(tipo.toUpperCase())) {
 
 				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
 						.replaceAll("%repo", "TesteApiGit")).toString();
-				response = releaseService.getRequestSpecification().accept("application/json").when().get(url)
+				response = this.releaseService.getRequestSpecification().accept("application/json").when().get(url)
 						.andReturn();
 			}
 
@@ -100,13 +104,13 @@ public class ReleaseStep {
 
 				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
 						.replaceAll("%repo", "TesteApiGit")).append("/")
-								.append(releaseService.getReleaseResponse().getId()).toString();
-				response = releaseService.getRequestSpecification().when().delete(url).andReturn();
+								.append(this.releaseService.getReleaseResponse().getId()).toString();
+				response = this.releaseService.getRequestSpecification().when().delete(url).andReturn();
 			}
 			break;
 		}
 
-		releaseService.setResponse(response);
+		this.releaseService.setResponse(response);
 	}
 
 	@Then("Validar {int} retorno")
@@ -115,12 +119,12 @@ public class ReleaseStep {
 		System.out.format(" Thread ID - %2d - Validar %s retorno \n", Thread.currentThread().getId(),
 				expectedStatusCode);
 
-		assertEquals(expectedStatusCode, releaseService.getResponse().getStatusCode());
+		assertEquals(expectedStatusCode, this.releaseService.getResponse().getStatusCode());
 	}
 
 	private void montarRequestDetetarRelease() throws JSONException {
 
-		JSONArray contents = new JSONArray(releaseService.getResponse().body().asString());
+		JSONArray contents = new JSONArray(this.releaseService.getResponse().body().asString());
 
 		Random random = new Random();
 
@@ -129,7 +133,7 @@ public class ReleaseStep {
 			JSONObject release = contents.getJSONObject(random.nextInt(contents.length() - 1));
 
 			ReleaseResponse releaseResponse = new ReleaseResponse(Long.parseLong(release.get("id").toString()));
-			releaseService.setReleaseResponse(releaseResponse);
+			this.releaseService.setReleaseResponse(releaseResponse);
 		}
 
 	}

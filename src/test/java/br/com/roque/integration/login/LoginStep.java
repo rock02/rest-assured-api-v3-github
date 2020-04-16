@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import br.com.roque.integration.conf.EnumValidationException;
 import io.cucumber.datatable.DataTable;
@@ -13,24 +14,28 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.specification.RequestSpecification;
 
-public class LoginStep {
+public final class LoginStep {
 
-	private LoginService loginService = new LoginService();
+	private final LoginService loginService;
+
+    public LoginStep( LoginService loginService ) {
+        this.loginService = Objects.requireNonNull( loginService, "loginService must not be null" );
+    }
 
 	@Given("Utilizar dados para autorizacao:")
 	public RequestSpecification utilizar_dados_para_autorizacao(DataTable dt) {
-		        
+
 		LoginRequest loginRequest = this.utilizarDadosAutorizacao(dt);
-		
+
 		System.out.format(" Thread ID - %2d - Utilizar dados para autorizacao: Login: %s \n",
-		        Thread.currentThread().getId(), loginRequest.getUsername());
-		
-		loginService.setLoginRequest(loginRequest);
-		
-		loginService.setRequestSpecification(given().auth().preemptive()
-				.basic(loginService.getLoginRequest().getUsername(), loginService.getLoginRequest().getPassword()));
-		
-		return loginService.getRequestSpecification();
+				Thread.currentThread().getId(), loginRequest.getUsername());
+
+		this.loginService.setLoginRequest(loginRequest);
+
+		this.loginService.setRequestSpecification(given().auth().preemptive()
+				.basic(this.loginService.getLoginRequest().getUsername(), this.loginService.getLoginRequest().getPassword()));
+
+		return this.loginService.getRequestSpecification();
 	}
 
 	private LoginRequest utilizarDadosAutorizacao(DataTable dt) {
@@ -49,21 +54,21 @@ public class LoginStep {
 
 	@When("Enviar requisicao para api {string}")
 	public void enviar_requisicao(String urlPath) throws EnumValidationException {
-		
-		System.out.format(" Thread ID - %2d - Enviar requisicao para api %s \n",
-		        Thread.currentThread().getId(), urlPath);
-		
-		loginService.setResponse(loginService.getRequestSpecification().when().get(LoginPathEnum.getPath(urlPath)));
+
+		System.out.format(" Thread ID - %2d - Enviar requisicao para api %s \n", Thread.currentThread().getId(),
+				urlPath);
+
+		this.loginService.setResponse(this.loginService.getRequestSpecification().when().get(LoginPathEnum.getPath(urlPath)));
 
 	}
 
 	@Then("Validar {int} retorno")
 	public void validar_retorno(int expectedStatusCode) {
-		
-		System.out.format(" Thread ID - %2d - Validar $s retorno \n",
-		        Thread.currentThread().getId(), expectedStatusCode);
 
-		assertEquals(expectedStatusCode, loginService.getResponse().getStatusCode());
-		
+		System.out.format(" Thread ID - %2d - Validar $s retorno \n", Thread.currentThread().getId(),
+				expectedStatusCode);
+
+		assertEquals(expectedStatusCode, this.loginService.getResponse().getStatusCode());
+
 	}
 }

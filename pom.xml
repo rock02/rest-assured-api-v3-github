@@ -97,11 +97,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-guice</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.2.3</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>de.monochromata.cucumber</groupId>
