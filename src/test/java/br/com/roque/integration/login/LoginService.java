@@ -13,10 +13,6 @@ public class LoginService {
 
 	private RequestSpecification requestSpecification;
 
-//	public LoginService() {
-//		super();
-//	}
-
 	public RequestSpecification getRequestSpecification() {
 		return requestSpecification;
 	}
