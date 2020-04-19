@@ -37,7 +37,7 @@ public final class ReleaseStep {
 	@Given("Utilizar dados para autorizacao do login")
 	public void criar_autorizacao_login() {
 
-		releaseService.setRequestSpecification(this.loginService.realizarLogin());
+		this.releaseService.setRequestSpecification(this.loginService.realizarLogin());
 	}
 
 	@And("Utilizar dados para criar release:")
