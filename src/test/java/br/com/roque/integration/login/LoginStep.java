@@ -17,7 +17,7 @@ import io.restassured.specification.RequestSpecification;
 public final class LoginStep {
 
 	private final LoginService loginService;
-
+	
     public LoginStep( LoginService loginService ) {
         this.loginService = Objects.requireNonNull( loginService, "loginService must not be null" );
     }
@@ -62,7 +62,7 @@ public final class LoginStep {
 
 	}
 
-	@Then("Validar {int} retorno")
+	@Then("Validar {int} retorno login")
 	public void validar_retorno(int expectedStatusCode) {
 
 		System.out.format(" Thread ID - %2d - Validar $s retorno \n", Thread.currentThread().getId(),

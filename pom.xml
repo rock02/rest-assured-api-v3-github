@@ -48,14 +48,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13</version>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>com.github.javafaker</groupId>
 			<artifactId>javafaker</artifactId>
@@ -69,6 +61,12 @@
 		</dependency>
 
 		<!-- cucumber -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
@@ -140,10 +138,15 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.18.1</version>
 				<configuration>
-					<parallel>classesAndMethods</parallel>
-					<threadCount>4</threadCount>
-					<useUnlimitedThreads>true</useUnlimitedThreads>
-					<perCoreThreadCount>false</perCoreThreadCount>
+					<includes>
+	                    <exclude>
+	                        **/RunCukes.java
+	                    </exclude>
+	                </includes>
+					<parallel>methods</parallel>
+					<threadCount>8</threadCount>
+					<!-- <useUnlimitedThreads>true</useUnlimitedThreads> -->
+					<perCoreThreadCount>true</perCoreThreadCount>
 				</configuration>
 			</plugin>
 

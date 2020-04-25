@@ -8,7 +8,7 @@ Feature: Responsavel pelo login no git
 			|	username	|	 password		|
 			|	rock02 		|	 Lipe@1234		|
 		When Enviar requisicao para api "PATH_LOGIN"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno login
 		
 		Examples:
 			| 	CODIGO		|
@@ -20,7 +20,7 @@ Feature: Responsavel pelo login no git
 			|	username	|	 password			|
 			|	rock02 		|	 Lipe@1234555		|
 		When Enviar requisicao para api "PATH_LOGIN"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno login
 		
 		Examples:
 			| 	CODIGO		|

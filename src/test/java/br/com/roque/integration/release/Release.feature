@@ -9,7 +9,7 @@ Feature: Responsavel pelas releases no git
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	master				|	criar relase	|	false	|	false		|
 		When Enviar requisicao "POST" para api "PATH_RELEASE"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno release
 		
 		Examples:
 			| 	CODIGO	|
@@ -22,7 +22,7 @@ Feature: Responsavel pelas releases no git
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	invalida			|	criar relase	|	false	|	false		|
 		When Enviar requisicao "POST" para api "PATH_RELEASE"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno release
 		
 		Examples:
 			| 	CODIGO	|
@@ -39,7 +39,7 @@ Feature: Responsavel pelas releases no git
 			|	master				|	criar relase	|	false	|	false		|
 		And Enviar requisicao "POST" para api "PATH_RELEASE"
 		When Enviar requisicao "GET" para api "PATH_RELEASE"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno release
 		
 		Examples:
 			| 	CODIGO	|
@@ -56,7 +56,7 @@ Feature: Responsavel pelas releases no git
 		And Enviar requisicao "POST" para api "PATH_RELEASE"
 		And Possuir release "<CENARIO>"
 		When Enviar requisicao "DELETE" para api "PATH_RELEASE"
-		Then Validar <CODIGO> retorno
+		Then Validar <CODIGO> retorno release
 		
 		Examples:
 			|	CENARIO			| 	CODIGO	|

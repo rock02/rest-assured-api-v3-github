@@ -113,7 +113,7 @@ public final class ReleaseStep {
 		this.releaseService.setResponse(response);
 	}
 
-	@Then("Validar {int} retorno")
+	@Then("Validar {int} retorno release")
 	public void validar_retorno(int expectedStatusCode) {
 
 		System.out.format(" Thread ID - %2d - Validar %s retorno \n", Thread.currentThread().getId(),
