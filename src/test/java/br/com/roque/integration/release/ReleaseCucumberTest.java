@@ -7,9 +7,11 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-	            glue = { "br.com.roque.integration.release" }, 
+	            glue = { "br.com.roque.integration.release" },
+	            features = { "src/test/java/br/com/roque/integration/release" },
 	            plugin = { "pretty", "json:target/report.json", "de.monochromata.cucumber.report.PrettyReports:target/pretty-cucumber" },
-	            stepNotifications = true
+	            stepNotifications = true,
+	            strict = true
 				)
 public class ReleaseCucumberTest {
 

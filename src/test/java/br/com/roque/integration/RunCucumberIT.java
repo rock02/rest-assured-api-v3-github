@@ -7,13 +7,19 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		glue = { "br.com.roque.integration.login", 
+		glue = {  
+				 "br.com.roque.integration.login", 
+				 "br.com.roque.integration.release", 
 				 "br.com.roque.integration.parallel", 
-				 "br.com.roque.integration.release" 
+				},
+		features = { 
+				"src/test/java/br/com/roque/integration/login", 
+				"src/test/java/br/com/roque/integration/release", 
+				"src/test/java/br/com/roque/integration/parallel", 
 				},
 		plugin = { "pretty", "json:target/report.json", "de.monochromata.cucumber.report.PrettyReports:target/pretty-cucumber" },
         stepNotifications = true,
         strict = true)
-public class RunCukes {
+public class RunCucumberIT {
 
 }
