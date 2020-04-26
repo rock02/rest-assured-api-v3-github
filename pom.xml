@@ -13,21 +13,23 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<java.version>1.8</java.version>
 		<cucumber.version>5.6.0</cucumber.version>
-		<junit.version>5.6.0</junit.version>
+		<junit.version>5.6.2</junit.version>
 		<restassured.version>4.3.0</restassured.version>
 		<slf4j.log.version>1.7.5</slf4j.log.version>
+		<maven.surefire.version>2.22.1</maven.surefire.version>
+		<maven.compiler.version>3.3</maven.compiler.version>
+		
 	</properties>
 
 	<dependencies>
 
 		<!-- junit -->
 		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<!-- rest-assured -->
 		<dependency>
@@ -86,19 +88,6 @@
 
 		<dependency>
 			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-core</artifactId>
-			<version>${cucumber.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>${cucumber.version}</version>
 			<scope>test</scope>
@@ -134,6 +123,28 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
@@ -141,22 +152,7 @@
 					<target>${maven.compiler.target}</target>
 					<executable>path/to/jdk/bin/javac</executable>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<includes>
-						<include>**/RunCucumberIT.java</include>
-					</includes>
-					<parallel>classesAndMethods</parallel>
-					<threadCount>4</threadCount>
-					<useUnlimitedThreads>true</useUnlimitedThreads>
-					<perCoreThreadCount>false</perCoreThreadCount>
-				</configuration>
-			</plugin>
+			</plugin> -->
 
 		</plugins>
 	</build>
