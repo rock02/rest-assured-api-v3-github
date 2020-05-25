@@ -3,20 +3,18 @@ package br.com.roque.integration.login;
 import java.util.Objects;
 
 import br.com.roque.integration.conf.EnumValidationException;
+import lombok.Getter;
 
 public enum LoginPathEnum {
 
-	PATH_LOGIN("https://api.github.com");
+	PATH_LOGIN("/login");
 
+	@Getter
 	private String path;
 
 	LoginPathEnum(String path) {
 
 		this.path = path;
-	}
-
-	public String getPath() {
-		return path;
 	}
 
 	public static String getPath(String path) throws EnumValidationException {

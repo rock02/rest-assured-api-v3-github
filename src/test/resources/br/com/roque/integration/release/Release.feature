@@ -7,8 +7,8 @@ Feature: Responsavel pelas releases no git
 		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
-			|	master				|	criar relase	|	false	|	false		|
-		When Enviar requisicao "POST" para api "PATH_RELEASE"
+			|	master				|	criar release	|	false	|	false		|
+		When Enviar requisicao "POST" para api release "PATH_RELEASE"
 		Then Validar <CODIGO> retorno release
 		
 		Examples:
@@ -20,13 +20,13 @@ Feature: Responsavel pelas releases no git
 		Given Utilizar dados para autorizacao do login
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
-			|	invalida			|	criar relase	|	false	|	false		|
-		When Enviar requisicao "POST" para api "PATH_RELEASE"
+			|	invalida			|	criar release	|	false	|	false		|
+		When Enviar requisicao "POST" para api release "PATH_RELEASE"
 		Then Validar <CODIGO> retorno release
 		
 		Examples:
 			| 	CODIGO	|
-			|   422		|
+			|   401		|
 			
 			
 ##----------------------------------------------------------------LISTAR RELEASE----------------------------------------------------------------##
@@ -37,28 +37,12 @@ Feature: Responsavel pelas releases no git
 		And Utilizar dados para criar release:
 			|	target_commitish	|	body			|	draft	|	prerelease	|
 			|	master				|	criar relase	|	false	|	false		|
-		And Enviar requisicao "POST" para api "PATH_RELEASE"
-		When Enviar requisicao "GET" para api "PATH_RELEASE"
+		And Possuir release "<RELEASE>"
+		When Enviar requisicao "GET" para api release "PATH_RELEASE"
 		Then Validar <CODIGO> retorno release
 		
 		Examples:
-			| 	CODIGO	|
-			|   200		|
+			|	RELEASE 	| 	CODIGO	|
+			|	CRIADA		|   200		|
+			|	INEXISTENTE	|   401		|
 			
-##----------------------------------------------------------------DELETAR RELEASE----------------------------------------------------------------##
-			
-	@deletar_releases
-	Scenario Outline: Detelar uma release do repositorio
-		Given Utilizar dados para autorizacao do login
-		And Utilizar dados para criar release:
-			|	target_commitish	|	body			|	draft	|	prerelease	|
-			|	master				|	criar relase	|	false	|	false		|
-		And Enviar requisicao "POST" para api "PATH_RELEASE"
-		And Possuir release "<CENARIO>"
-		When Enviar requisicao "DELETE" para api "PATH_RELEASE"
-		Then Validar <CODIGO> retorno release
-		
-		Examples:
-			|	CENARIO			| 	CODIGO	|
-			|	VALIDO			|   204		|
-			|	INEXISTENTE		|   404		|

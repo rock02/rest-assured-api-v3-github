@@ -1,43 +1,41 @@
 package br.com.roque.integration.release;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.javafaker.Faker;
 
 import br.com.roque.integration.conf.EnumValidationException;
-import br.com.roque.integration.login.LoginService;
+import br.com.roque.integration.login.LoginServiceInformation;
+import br.com.roque.integration.request.ReleaseRequest;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 
-public final class ReleaseStep {
+public class ReleaseStep {
 
-	private final ReleaseService releaseService;
+	@Autowired
+	private ReleaseServiceInformation releaseService;
 
-	private final LoginService loginService;
-
-	public ReleaseStep(ReleaseService releaseService, LoginService loginService) {
-        this.releaseService = Objects.requireNonNull(releaseService, "releaseService must not be null" );
-        this.loginService = Objects.requireNonNull(loginService, "loginService must not be null" );
-
-	}
+	@Autowired
+	private LoginServiceInformation loginService;
 
 	@Given("Utilizar dados para autorizacao do login")
 	public void criar_autorizacao_login() {
 
-		this.releaseService.setRequestSpecification(this.loginService.realizarLogin());
+		this.loginService.realizarLogin();
+
+		this.loginService.setRequestSpecification(given().contentType("application/json"));
+
 	}
 
 	@And("Utilizar dados para criar release:")
@@ -58,59 +56,41 @@ public final class ReleaseStep {
 
 		System.out.format(" Thread ID - %2d - Possuir release %s \n", Thread.currentThread().getId(), cenario);
 
-		this.enviar_requisicao("GET", "PATH_RELEASE");
-
 		if ("INEXISTENTE".equals(cenario)) {
 
 			ReleaseResponse releaseResponse = new ReleaseResponse(-1L);
 			this.releaseService.setReleaseResponse(releaseResponse);
 		} else
-			this.montarRequestDetetarRelease();
-
+			if ("CRIADA".equals(cenario)) {
+				
+				this.enviar_requisicao("POST", "PATH_RELEASE");
+				this.montarRequestListarRelease();
+			} else
+		
+				assertFalse(false, "cenario nao existe");
 	}
 
-	@When("Enviar requisicao {string} para api {string}")
-	public void enviar_requisicao(String tipo, String urlPath) throws EnumValidationException {
+	@When("Enviar requisicao {string} para api release {string}")
+	public void enviar_requisicao(String tipo, String urlPath) throws EnumValidationException, JSONException {
 
 		System.out.format(" Thread ID - %2d - Enviar requisicao %s para api %s \n", Thread.currentThread().getId(),
 				tipo, urlPath);
 
-		String url = null;
+		if ("POST".equals(tipo.toUpperCase())) {
+			
+			this.releaseService.setResponse(this.loginService.getRequestSpecification().body(this.releaseService.getReleaseRequest()).when().post(ReleasePathEnum.getPath(urlPath)));
 
-		Response response = null;
-
-		switch (urlPath) {
-
-		case "PATH_RELEASE":
-
-			if ("POST".equals(tipo.toUpperCase())) {
-
-				this.releaseService.getRequestSpecification().accept("application/json")
-						.body(this.releaseService.getReleaseRequest());
-
-				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
-						.replaceAll("%repo", "TesteApiGit")).toString();
-
-				response = this.releaseService.getRequestSpecification().when().post(url).andReturn();
-			} else if ("GET".equals(tipo.toUpperCase())) {
-
-				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
-						.replaceAll("%repo", "TesteApiGit")).toString();
-				response = this.releaseService.getRequestSpecification().accept("application/json").when().get(url)
-						.andReturn();
-			}
-
-			else {
-
-				url = new StringBuilder(ReleasePathEnum.getPath(urlPath).replaceAll("%owner", "rock02")
-						.replaceAll("%repo", "TesteApiGit")).append("/")
-								.append(this.releaseService.getReleaseResponse().getId()).toString();
-				response = this.releaseService.getRequestSpecification().when().delete(url).andReturn();
-			}
-			break;
+		} else {
+			
+			if ("GET".equals(tipo.toUpperCase())) {
+				
+				this.releaseService.setResponse(this.loginService.getRequestSpecification().when()
+						.get(new StringBuilder(ReleasePathEnum.getPath(urlPath)).append("/").append(this.releaseService.getReleaseResponse().getId()).toString()));
+			} else 
+				
+				assertFalse(false, "tipo nao existe");
 		}
-
-		this.releaseService.setResponse(response);
+		
 	}
 
 	@Then("Validar {int} retorno release")
@@ -122,19 +102,13 @@ public final class ReleaseStep {
 		assertEquals(expectedStatusCode, this.releaseService.getResponse().getStatusCode());
 	}
 
-	private void montarRequestDetetarRelease() throws JSONException {
+	private void montarRequestListarRelease() throws JSONException {
 
-		JSONArray contents = new JSONArray(this.releaseService.getResponse().body().asString());
+		String id = this.releaseService.getResponse().body().asString();
 
-		Random random = new Random();
-
-		if (Objects.nonNull(contents) && contents.length() > 0) {
-
-			JSONObject release = contents.getJSONObject(random.nextInt(contents.length() - 1));
-
-			ReleaseResponse releaseResponse = new ReleaseResponse(Long.parseLong(release.get("id").toString()));
+		ReleaseResponse releaseResponse = ReleaseResponse.builder().id(Long.parseLong(id))
+					.build();
 			this.releaseService.setReleaseResponse(releaseResponse);
-		}
 
 	}
 
@@ -151,8 +125,11 @@ public final class ReleaseStep {
 			String name = new StringBuilder(faker.name().firstName()).append(".").append(faker.number().randomDigit())
 					.toString();
 
-			releaseRequest = new ReleaseRequest(name, name, item.get("target_commitish"), item.get("body"),
-					Boolean.valueOf(item.get("draft")), Boolean.valueOf(item.get("prerelease")));
+			releaseRequest = ReleaseRequest.builder().loginRequest(this.loginService.getLoginRequest()).name(name)
+					.tag_name(name).target_commitish(item.get("target_commitish")).body(item.get("body"))
+					.draft(Boolean.valueOf(item.get("draft"))).prerelease(Boolean.valueOf(item.get("prerelease")))
+					.build();
+
 		}
 
 		return releaseRequest;

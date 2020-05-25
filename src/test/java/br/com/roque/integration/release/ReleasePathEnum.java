@@ -3,20 +3,19 @@ package br.com.roque.integration.release;
 import java.util.Objects;
 
 import br.com.roque.integration.conf.EnumValidationException;
+import lombok.Getter;
 
 public enum ReleasePathEnum {
 	
-	PATH_RELEASE("https://api.github.com/repos/%owner/%repo/releases");
+//	PATH_RELEASE("https://api.github.com/repos/%owner/%repo/releases");
+	PATH_RELEASE("/release");
 	
+	@Getter
 	private String path;
 	
 	private ReleasePathEnum(String path) {
 		
 		this.path = path;
-	}
-
-	public String getPath() {
-		return path;
 	}
 
 	public static String getPath(String path) throws EnumValidationException {

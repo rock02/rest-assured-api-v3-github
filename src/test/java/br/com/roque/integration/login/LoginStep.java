@@ -1,29 +1,28 @@
 package br.com.roque.integration.login;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.roque.integration.conf.EnumValidationException;
+import br.com.roque.integration.request.LoginRequest;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.specification.RequestSpecification;
 
-public final class LoginStep {
+public class LoginStep {
 
-	private final LoginService loginService;
+	@Autowired
+	private LoginServiceInformation loginService;
 	
-    public LoginStep( LoginService loginService ) {
-        this.loginService = Objects.requireNonNull( loginService, "loginService must not be null" );
-    }
-
 	@Given("Utilizar dados para autorizacao:")
-	public RequestSpecification utilizar_dados_para_autorizacao(DataTable dt) {
+	public void utilizar_dados_para_autorizacao(DataTable dt) {
 
 		LoginRequest loginRequest = this.utilizarDadosAutorizacao(dt);
 
@@ -31,11 +30,9 @@ public final class LoginStep {
 				Thread.currentThread().getId(), loginRequest.getUsername());
 
 		this.loginService.setLoginRequest(loginRequest);
+		
+		this.loginService.setRequestSpecification(given().contentType("application/json"));
 
-		this.loginService.setRequestSpecification(given().auth().preemptive()
-				.basic(this.loginService.getLoginRequest().getUsername(), this.loginService.getLoginRequest().getPassword()));
-
-		return this.loginService.getRequestSpecification();
 	}
 
 	private LoginRequest utilizarDadosAutorizacao(DataTable dt) {
@@ -46,20 +43,24 @@ public final class LoginStep {
 
 		for (Map<String, String> item : list) {
 
-			loginRequest = new LoginRequest(item.get("username"), item.get("password"));
+			loginRequest = LoginRequest.builder().username(item.get("username")).password(item.get("password")).build();
 		}
 
 		return loginRequest;
 	}
-
-	@When("Enviar requisicao para api {string}")
-	public void enviar_requisicao(String urlPath) throws EnumValidationException {
+		
+	@When("Enviar requisicao {string} para api login {string}")
+	public void enviar_requisicao(String tipo, String urlPath) throws EnumValidationException {
 
 		System.out.format(" Thread ID - %2d - Enviar requisicao para api %s \n", Thread.currentThread().getId(),
 				urlPath);
-
-		this.loginService.setResponse(this.loginService.getRequestSpecification().when().get(LoginPathEnum.getPath(urlPath)));
-
+		
+		if ("POST".equals(tipo)) {
+			
+			this.loginService.setResponse(this.loginService.getRequestSpecification().body(this.loginService.getLoginRequest()).when().post(LoginPathEnum.getPath(urlPath)));
+		} else 
+			assertFalse("cenario nao implementado", false);
+	
 	}
 
 	@Then("Validar {int} retorno login")
