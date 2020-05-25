@@ -7,7 +7,6 @@ import lombok.Getter;
 
 public enum ReleasePathEnum {
 	
-//	PATH_RELEASE("https://api.github.com/repos/%owner/%repo/releases");
 	PATH_RELEASE("/release");
 	
 	@Getter
