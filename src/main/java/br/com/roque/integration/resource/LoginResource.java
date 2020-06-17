@@ -13,9 +13,10 @@ import br.com.roque.integration.request.LoginRequest;
 
 @RestController
 @RequestMapping("/login")
-public class LoginResource {
+public class LoginResource implements LoginDefinition {
 
 	@PostMapping
+	@Override
 	public ResponseEntity<String> logar(@Valid @RequestBody LoginRequest loginRequest) {
 		
 		if (loginRequest.getUsername().equals("rock02") && loginRequest.getPassword().equals("Lipe@1234"))

@@ -15,9 +15,10 @@ import br.com.roque.integration.request.ReleaseRequest;
 
 @RestController
 @RequestMapping("/release")
-public class ReleaseResource {
+public class ReleaseResource implements ReleaseDefinition {
 
 	@PostMapping
+	@Override
 	public ResponseEntity<String> criarRelease(@Valid @RequestBody ReleaseRequest releaseRequest) {
 		
 		if (releaseRequest.getTarget_commitish().equals("master")) {
@@ -29,7 +30,8 @@ public class ReleaseResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<String> criarRelease(@Valid @PathVariable(name = "id") Long id) {
+	@Override
+	public ResponseEntity<String> getRelease(@Valid @PathVariable(name = "id") Long id) {
 		
 		if (id.equals(10L)) {
 			return ResponseEntity.status(HttpStatus.OK).body("");
